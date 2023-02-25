@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaArrowDown, FaArrowUp, FaCheckCircle, FaChevronDown, FaChevronRight, FaClock, FaEnvelope, FaFontAwesome } from "react-icons/fa";
 import { useNavigate, useNavigation } from "react-router-dom";
-import { EVALUATOR_VIEW_INVITATIONS_URL } from "../backend/urls";
+import { EVALUATOR_APPLICANT_PROFILEPIC_URL, EVALUATOR_VIEW_INVITATIONS_URL } from "../backend/urls";
 import useAxiosEvaluator from "../hooks/useAxiosEvaluator";
 import { applicantPreviewRoute, committeeRoute } from "../routes";
 import { expirationText, logoutText, viewApplicantsText } from "../strings";
@@ -19,7 +19,7 @@ const CommiteePage = () => {
 
     const fetchInvitations = () => {
         axiosEvaluator.get(EVALUATOR_VIEW_INVITATIONS_URL).then((response => {
-            console.log(response.data);
+
             setInvitations(response.data);
         })).catch(error => console.error(error));
     }
@@ -84,20 +84,46 @@ const ApplicantView = ({ applicant }) => {
 
 export const InvitationComponent = ({ invitation }) => {
 
-    console.log(invitation);
     const [viewApplicants, setViewApplicants] = useState(false);
 
     const navigate = useNavigate();
+
+    const axiosEvaluator = useAxiosEvaluator();
+    const applicantCount = invitation.applicants.length;
 
     const handleAllApplicantsPreview = () => {
         navigate(committeeRoute + applicantPreviewRoute, { state: { applicants: invitation.applicants, title: invitation.title } });
     }
 
-    const ActionButton = ({ content, handleClick }) => {
+
+    const ApplicantPreview = ({ applicant }) => {
+        const [profilePicUrl, setProfilePicUrl] = useState('');
+        const fetchProfilePic = () => {
+
+            axiosEvaluator.post(EVALUATOR_APPLICANT_PROFILEPIC_URL, { id: applicant.id }, { responseType: 'blob' }).then((response) => {
+                if (response.status !== 204) {
+                    const url = URL.createObjectURL(response.data);
+                    setProfilePicUrl(url);
+                }
+
+            }).catch((error) => { console.log(error) });
+
+        }
+
+        useEffect(() => {
+            fetchProfilePic();
+        }, []);
+
         return (
-            <div className="flex p-4 cursor-pointer rounded-md bg-stone-400 justify-center items-center hover:drop-shadow-xl transition-all duration-300 ease-in-out"
-                onClick={handleClick}>
-                {content}
+            <div className='flex p-4 bg-white justify-between items-center cursor-pointer space-x-4 transition-all duration-300 ease-in-out'>
+                <div className='flex flex-row space-x-4'>
+                    <div className='flex rounded-full bg-gray-300'>
+                        <img src={!profilePicUrl ? '/unknown_avatar.png' : profilePicUrl} alt='profile pic' className='w-8 h-8 object-cover rounded-full'></img>
+                    </div>
+                    <h2 className='text-gray-700 font-bold'>{applicant.firstName + ' ' + applicant.lastName}</h2>
+                </div>
+
+                <FaChevronRight color='gray' />
             </div>
         );
     }
@@ -114,14 +140,22 @@ export const InvitationComponent = ({ invitation }) => {
             </div>
 
 
-            <div className="flex w-full mt-6 items-center justify-between p-6  hover:bg-gray-100 transition-all duration-200 ease-in-out cursor-pointer">
+            <div className="flex w-full mt-6 items-center justify-between p-6  hover:bg-gray-100 transition-all duration-200 ease-in-out cursor-pointer" onClick={() => {
+                setViewApplicants(!viewApplicants);
+            }}>
                 <div className="flex items-center space-x-2">
                     <FaEnvelope color="gray" />
-                    <h2 className="font-semibold text-gray-600">{`Προβολή Αιτήσεων (${invitation.applicants.length})`}</h2>
+                    <h2 className="font-semibold text-gray-600">{`Προβολή Αιτήσεων (${applicantCount})`}</h2>
                 </div>
 
                 <FaChevronDown color="gray" />
             </div>
+
+            {viewApplicants &&
+                invitation.applicants.map((applicant) => {
+                    return <ApplicantPreview key={applicant.id} applicant={applicant} />
+                })
+            }
 
         </div>
     );
