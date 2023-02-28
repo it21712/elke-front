@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { EVALUATOR_APPLICANT_INFO_URL } from '../backend/urls';
+import { EVALUATOR_APPLICANT_INFO_URL, EVALUATOR_APPLICANT_PROFILEPIC_URL } from '../backend/urls';
 import useApplicant from '../hooks/useApplicant'
 import useAxiosEvaluator from '../hooks/useAxiosEvaluator';
 
@@ -12,6 +12,8 @@ const CommitteeApplicantFragment = () => {
 
     const axiosEvaluator = useAxiosEvaluator();
 
+    const [fetching, setFetching] = useState(true);
+
     const fetchApplicantInfo = () => {
         applicant && axiosEvaluator.post(EVALUATOR_APPLICANT_INFO_URL, { id: applicant.id })
             .then(response => {
@@ -22,6 +24,15 @@ const CommitteeApplicantFragment = () => {
                 }
             })
             .catch(error => console.error(error));
+
+        applicant && axiosEvaluator.post(EVALUATOR_APPLICANT_PROFILEPIC_URL, { id: applicant.id }, { responseType: 'blob' })
+            .then(response => {
+                if (response.status !== 204) {
+                    const url = URL.createObjectURL(response.data);
+                    setApplicantInfo(prevInfo => { return { ...prevInfo, profile_pic: url } });
+                    setFetching(false);
+                }
+            });
     }
 
     useEffect(() => {
@@ -30,7 +41,13 @@ const CommitteeApplicantFragment = () => {
 
     return (
         <div className='flex flex-col'>
-            {applicant ? <h2>{applicant.firstName}</h2> : <></>}
+            {fetching ? <h2>Loading</h2> :
+                <div className='flex flex-row space-x-4 p-4 items-center'>
+                    <div className='flex rounded-full bg-gray-300'>
+                        <img src={applicantInfo['profile_pic']} alt='profile pic' className='w-16 h-16 object-cover rounded-full'></img>
+                    </div>
+                    <h2 className='text-gray-700 font-bold text-xl'>{applicantInfo.firstName + ' ' + applicantInfo.lastName}</h2>
+                </div>}
         </div>
 
 
