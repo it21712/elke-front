@@ -13,3 +13,4 @@ export const APPLICANTS_FILE_METADATA_URL = '/applicants/files/metadata/';
 export const APPLICANTS_FILE_DOWNLOAD_URL = '/applicants/files/download/';
 export const EVALUATOR_VIEW_INVITATIONS_URL = '/committee/invitations/';
 export const EVALUATOR_APPLICANT_PROFILEPIC_URL = '/committee/applicant_pic/';
+export const EVALUATOR_APPLICANT_INFO_URL = '/committee/applicant_info/';
