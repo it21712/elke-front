@@ -1,12 +1,19 @@
-import { memo, useEffect, useRef, useState } from "react";
-import { FaArrowDown, FaArrowUp, FaCheckCircle, FaChevronDown, FaChevronRight, FaClock, FaEnvelope, FaFontAwesome } from "react-icons/fa";
-import { useNavigate, useNavigation } from "react-router-dom";
+import { createContext, memo, useContext, useEffect, useRef, useState } from "react";
+import { FaArrowDown, FaArrowUp, FaCheckCircle, FaChevronDown, FaChevronLeft, FaChevronRight, FaClock, FaEnvelope, FaFontAwesome } from "react-icons/fa";
+import { json, useNavigate, useNavigation } from "react-router-dom";
 import { EVALUATOR_APPLICANT_INFO_URL, EVALUATOR_APPLICANT_PROFILEPIC_URL, EVALUATOR_VIEW_INVITATIONS_URL } from "../backend/urls";
+import CommitteeApplicantFragment from "../components/CommitteeApplicantFragment";
 import CommitteeInvitation from "../components/CommitteeInvitation";
+import FadeInList from "../components/FadeInList";
+import { ApplicantViewContext, ApplicantViewProvider } from "../context/ApplicantViewProvider";
 import useAxiosEvaluator from "../hooks/useAxiosEvaluator";
 import { applicantPreviewRoute, committeeRoute } from "../routes";
 import { appTitle, expirationText, logoutText, viewApplicantsText } from "../strings";
 import './CommitteePage.css';
+
+
+
+
 const CommiteePage = () => {
 
     const testEvaluator = {
@@ -20,7 +27,7 @@ const CommiteePage = () => {
 
     const [invitations, setInvitations] = useState(undefined);
 
-    const [selectedInvitation, setSelectedInvitation] = useState(0);
+    const [viewInvitationList, setViewInvitationList] = useState(true);
 
     const fetchInvitations = () => {
         axiosEvaluator.get(EVALUATOR_VIEW_INVITATIONS_URL).then((response => {
@@ -35,114 +42,125 @@ const CommiteePage = () => {
     }, []);
 
 
-
     return (
         <div className="flex flex-col w-screen h-screen">
-
             <div className="flex bg-gray-800 shadow-md fixed w-full z-10 top-0 px-3 h-16">
                 <h3 className='font-semibold invisible sm:visible text-white my-auto'>{appTitle}</h3>
             </div>
 
-            <div className="flex flex-row w-screen fixed top-16 bg-gray-200 h-full">
-                <div className={`scrollbar-hide flex flex-col h-full ${showApplicants ? 'w-[50%] justify-start' : 'w-full justify-center'} border-r overflow-y-scroll items-center transition-all duration-300 ease-in-out`}>
-                    <div className={`flex flex-col ${showApplicants ? 'w-full' : 'w-[60%]' } space-y-4 items-center`}>
-                        {invitations ? invitations.map((invitation) => <CommitteeInvitation key={invitation.id} data={invitation} handleShowApplicants={
-                            () => setShowApplicants(!showApplicants)}/>) : <></>}
+            {/* {viewInvitationList ? <InvitationListViewFragment setViewInvitationList={setViewInvitationList} /> : */}
+            {viewInvitationList ? <InvitationListViewFragment setViewInvitationList={setViewInvitationList} /> :
+                <InvitationViewFragment setViewInvitationList={setViewInvitationList} />}
 
-                    </div>
-
-
-                </div>
-                {showApplicants &&
-                    <div className="h-full w-[50%] border-l overflow-y-scroll">
-                        
-                            <div className="flex flex-col justify-center p-4 items-start">
-                                <h2 className="text-gray-800 font-bold">{invitations[selectedInvitation].applicants[0].firstName + ' ' + invitations[selectedInvitation].applicants[0].lastName}</h2>
-                                
-                            </div>
-                        
-                    </div>
-                }
-            </div>
         </div>
-
     );
+    // return (
+    //     <div className="flex flex-col w-screen h-screen">
+
+    //         <div className="flex bg-gray-800 shadow-md fixed w-full z-10 top-0 px-3 h-16">
+    //             <h3 className='font-semibold invisible sm:visible text-white my-auto'>{appTitle}</h3>
+    //         </div>
+
+    //         <div className="flex flex-row w-screen fixed top-16 bg-gray-200 h-full">
+    //             <div className={`scrollbar-hide flex flex-col h-full ${showApplicants ? 'w-[50%]' : 'w-full mt-[10%]'} justify-start border-r overflow-y-scroll items-center transition-all duration-300 ease-in-out`}>
+    //                 <div className={`flex flex-col ${showApplicants ? 'w-full' : 'w-[60%]'} space-y-4 items-center`}>
+    //                     {invitations ? invitations.map((invitation) => <CommitteeInvitation key={invitation.id} data={invitation} handleShowApplicants={
+    //                         () => setShowApplicants(!showApplicants)} />) : <></>}
+
+    //                 </div>
+
+
+    //             </div>
+    //             {showApplicants &&
+    //                 <div className="h-full w-[50%] border-l overflow-y-scroll">
+
+    //                     {/* <div className="flex flex-col justify-center p-4 items-start">
+    //                         <h2 className="text-gray-800 font-bold">{invitations[selectedInvitation].applicants[0].firstName + ' ' + invitations[selectedInvitation].applicants[0].lastName}</h2>
+
+    //                     </div> */}
+
+    //                 </div>
+    //             }
+    //         </div>
+    //     </div>
+
+    // );
 }
 
-const InvitationComponent = ({ invitation, showApplicants, setShowApplicants }) => {
+export const InvitationListViewFragment = ({ setViewInvitationList }) => {
 
-    const [viewApplicants, setViewApplicants] = useState(false);
-    const navigate = useNavigate();
+    const [invitations, setInvitations] = useState(undefined);
     const axiosEvaluator = useAxiosEvaluator();
-    const applicantCount = invitation.applicants.length;
 
+    const fetchInvitations = () => {
+        axiosEvaluator.get(EVALUATOR_VIEW_INVITATIONS_URL).then((response => {
 
-    const ApplicantPreview = ({ applicant }) => {
-        const [profilePicUrl, setProfilePicUrl] = useState('');
-        const fetchProfilePic = () => {
-
-            axiosEvaluator.post(EVALUATOR_APPLICANT_PROFILEPIC_URL, { id: applicant.id }, { responseType: 'blob' }).then((response) => {
-                if (response.status !== 204) {
-                    const url = URL.createObjectURL(response.data);
-                    setProfilePicUrl(url);
-                }
-
-            }).catch((error) => { console.log(error) });
-
-        }
-
-        useEffect(() => {
-            fetchProfilePic();
-        }, []);
-
-        return (
-            <div className='flex p-4 w-full bg-white justify-between items-center cursor-pointer space-x-4 transition-all duration-300 ease-in-out hover:bg-gray-100'>
-                <div className='flex flex-row space-x-4'>
-                    <div className='flex rounded-full bg-gray-300'>
-                        <img src={!profilePicUrl ? '/unknown_avatar.png' : profilePicUrl} alt='profile pic' className='w-8 h-8 object-cover rounded-full'></img>
-                    </div>
-                    <h2 className='text-gray-700 font-bold'>{applicant.firstName + ' ' + applicant.lastName}</h2>
-                </div>
-
-                <FaChevronRight color='gray' />
-            </div>
-        );
+            setInvitations(response.data);
+        })).catch(error => console.error(error));
     }
 
+
+    useEffect(() => {
+        fetchInvitations();
+    }, []);
+
+
+    const handleShowApplicants = (invitation) => { localStorage.setItem('invitation', JSON.stringify(invitation)); setViewInvitationList(false); }
+
     return (
-        <div className="flex flex-col w-full bg-white py-4 justify-start items-start rounded-lg hover:shadow-lg transition-all duration-1000 ease-in-out">
-            <div className="flex flex-col w-full px-6 bg-white justify-start items-start">
-                <h2 className="font-bold text-gray-700 text-xl">{invitation.program_title}</h2>
-                <h2 className="font-bold text-gray-500 -translate-y-[10%]">{invitation.title}</h2>
-                <div className="flex space-x-2 mt-2 items-center">
-                    <FaClock color="gray" />
-                    <h2 className="text-sm text-gray-400">{invitation.end.split('T')[0]}</h2>
+        <div className="flex flex-row w-screen fixed top-16 bg-gray-200 h-full">
+            <div className={`scrollbar-hide flex flex-col h-full w-full mt-[10%] justify-start border-r overflow-y-scroll items-center transition-all duration-300 ease-in-out`}>
+                {/* <div className={`flex flex-col w-[60%] space-y-4 items-center`}>
+                    {invitations ? invitations.map((invitation) => <CommitteeInvitation key={invitation.id} data={invitation} handleShowApplicants={() => handleShowApplicants(invitation)} />) : <></>}
+                </div> */}
+                <div className={`flex flex-col w-[60%] space-y-4 items-center`}>
+                    {invitations && <FadeInList tWrapperStyle={'flex flex-col w-[60%] space-y-4 items-center'} items={invitations.map((invitation) => <CommitteeInvitation key={invitation.id} data={invitation} handleShowApplicants={() => handleShowApplicants(invitation)} />)} />}
+
                 </div>
+
+
             </div>
-
-
-            <div className="flex w-full mt-6 items-center justify-between p-6  hover:bg-gray-100 transition-all duration-200 ease-in-out cursor-pointer" onClick={() => {
-                
-                
-                setViewApplicants(!viewApplicants);
-                setShowApplicants(!showApplicants);
-            }}>
-                <div className="flex items-center space-x-2">
-                    <FaEnvelope color="gray" />
-                    <h2 className="font-semibold text-gray-600">{`Προβολή Αιτήσεων (${applicantCount})`}</h2>
-                </div>
-            </div>
-
-            {viewApplicants &&
-                invitation.applicants.map((applicant) => {
-                    return <ApplicantPreview key={applicant.id} applicant={applicant} />
-                })
-            }
-
         </div>
     );
-
-    
 }
+
+
+export const InvitationViewFragment = ({ setViewInvitationList }) => {
+
+    const invitation = JSON.parse(localStorage.getItem('invitation'));
+    console.log(invitation);
+
+    //const [currentApplicant, setCurrentApplicant] = useState({});
+
+    return (
+        <ApplicantViewProvider>
+            <div className="flex flex-row w-full fixed top-16 h-full bg-gray-200">
+                <div className="flex-col w-[50%] space-y-6 h-full overflow-scroll scrollbar-hide">
+                    <div className="flex flex-row w-full space-x-6 p-2 items-center justify-start bg-white rounded-b-md cursor-pointer hover:bg-gray-100 transition duration-300 ease-in-out" onClick={() => setViewInvitationList(true)}>
+                        <div className="flex items-center justify-center p-2 rounded-full">
+                            <FaChevronLeft color="gray" />
+                        </div>
+                        <h2 className="text-gray-800 font-bold text-lg">Back to Invitations</h2>
+                    </div>
+
+                    <div className="flex w-full">
+
+                        <CommitteeInvitation data={invitation} preview={true} />
+
+
+                    </div>
+
+
+                </div>
+
+
+                <div className="flex flex-col w-[50%] space-y-6 h-full overflow-scroll scrollbar-hide">
+                    <CommitteeApplicantFragment />
+                </div>
+            </div>
+        </ApplicantViewProvider>
+    );
+}
+
 
 export default CommiteePage;
