@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { FaMapMarker, FaMapPin } from 'react-icons/fa';
+import { FaDownload, FaMapMarker, FaMapPin } from 'react-icons/fa';
 import { EVALUATOR_APPLICANT_FILES_URL, EVALUATOR_APPLICANT_INFO_URL, EVALUATOR_APPLICANT_PROFILEPIC_URL } from '../backend/urls';
 import useApplicant from '../hooks/useApplicant'
 import useAxiosEvaluator from '../hooks/useAxiosEvaluator';
@@ -56,19 +56,18 @@ const CommitteeApplicantFragment = () => {
         }, [])
 
         return (
-            <div className='flex flex-col w-full p-4 space-y-4 cursor-pointer hover:bg-gray-100  transition-all duration-500 ease-in-out' onClick={() => {
-                setExpanded(!expanded);
-            }}>
-                <div className='flex flex-row items-center space-x-2'>
+            <div className='flex flex-col w-full p-4 space-y-4 cursor-pointer hover:bg-gray-100  transition-all duration-500 ease-in-out'>
+                <div className='flex flex-row items-center space-x-2' onClick={() => {
+                    setExpanded(!expanded);
+                }}>
                     <ChevronRightIcon className={`w-6 h-6 ${expanded ? 'rotate-90' : 'rotate-0'} transition-all duration-300 ease-in-out`} color='gray' />
                     <h2 className='text-gray-700 font-bold text-lg'>{category}</h2>
                 </div>
-
                 {expanded &&
                     <div className='flex flex-row overflow-x-scroll scrollbar-hide space-x-2'>
                         {files.map((file) => {
                             return (
-                                <div className='p-4 flex bg-slate-200 truncate max-w-[300px] rounded-lg hover:shadow-lg'>
+                                <div className='p-4 flex flex-col bg-slate-200 truncate max-w-[300px] rounded-lg hover:shadow-lg'>
                                     <h2 className='text-gray-500 font-bold truncate'>{file.file}</h2>
                                 </div>
                             );
