@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { FaDownload, FaMapMarker, FaMapPin } from 'react-icons/fa';
+import React, { useEffect, useState } from 'react'
 import { EVALUATOR_APPLICANT_FILES_URL, EVALUATOR_APPLICANT_INFO_URL, EVALUATOR_APPLICANT_PROFILEPIC_URL } from '../backend/urls';
 import useApplicant from '../hooks/useApplicant'
 import useAxiosEvaluator from '../hooks/useAxiosEvaluator';
-import { ChevronRightIcon, DevicePhoneMobileIcon, EnvelopeIcon, MapPinIcon, PhoneIcon } from '@heroicons/react/24/solid';
-import { AFRText, contactText, CRTsText, CVText, FLNsText, MCTText, PGDsText, PHDsText, UGDsText, uploadedFilesText, uploadFilesText, WXPsText } from '../strings';
+import { ChevronRightIcon, DevicePhoneMobileIcon, EnvelopeIcon, MapPinIcon, PhoneIcon, EllipsisVerticalIcon } from '@heroicons/react/24/solid';
+import { AFRText, contactText, CRTsText, CVText, FLNsText, MCTText, PGDsText, PHDsText, UGDsText, uploadedFilesText, WXPsText } from '../strings';
 import FILETYPES from '../backend/fileTypes';
 
 const CommitteeApplicantFragment = () => {
@@ -67,8 +66,9 @@ const CommitteeApplicantFragment = () => {
                     <div style={{maxHeight: expanded ? '400px' : 0 }} className={`flex flex-row overflow-x-scroll overflow-y-hidden scrollbar-hide space-x-2 pl-2 transition-all  ease-in-out ${expanded && 'duration-700'}`}>
                         {files.map((file) => {
                             return (
-                                <div className='p-4 flex flex-col bg-slate-200 truncate max-w-[300px] rounded-lg hover:shadow-lg'>
+                                <div className='group p-4 flex flex-row bg-slate-200 truncate max-w-[300px] rounded-lg space-x-2 items-center'>
                                     <h2 className='text-gray-500 font-bold truncate'>{file.file}</h2>
+                                    <EllipsisVerticalIcon className='h-6 w-6' color='gray'/>
                                 </div>
                             );
                         })}
