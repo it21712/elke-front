@@ -56,15 +56,15 @@ const CommitteeApplicantFragment = () => {
         }, [])
 
         return (
-            <div className='flex flex-col w-full p-4 space-y-4 cursor-pointer hover:bg-gray-100  transition-all duration-500 ease-in-out'>
-                <div className='flex flex-row items-center space-x-2' onClick={() => {
+            <div className='flex flex-col w-full space-y-4 p-4 cursor-pointer hover:bg-gray-100 group transition-all duration-500 ease-in-out'>
+                <div className='flex flex-row items-center space-x-2 group-hover:translate-x-2 transition-all duration-200 ease-in-out' onClick={() => {
                     setExpanded(!expanded);
                 }}>
                     <ChevronRightIcon className={`w-6 h-6 ${expanded ? 'rotate-90' : 'rotate-0'} transition-all duration-300 ease-in-out`} color='gray' />
                     <h2 className='text-gray-700 font-bold text-lg'>{category}</h2>
                 </div>
-                {expanded &&
-                    <div className='flex flex-row overflow-x-scroll scrollbar-hide space-x-2'>
+                {
+                    <div style={{maxHeight: expanded ? '400px' : 0 }} className={`flex flex-row overflow-x-scroll overflow-y-hidden scrollbar-hide space-x-2 pl-2 transition-all  ease-in-out ${expanded && 'duration-700'}`}>
                         {files.map((file) => {
                             return (
                                 <div className='p-4 flex flex-col bg-slate-200 truncate max-w-[300px] rounded-lg hover:shadow-lg'>
