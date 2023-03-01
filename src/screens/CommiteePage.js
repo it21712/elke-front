@@ -8,7 +8,7 @@ import FadeInList from "../components/FadeInList";
 import { ApplicantViewContext, ApplicantViewProvider } from "../context/ApplicantViewProvider";
 import useAxiosEvaluator from "../hooks/useAxiosEvaluator";
 import { applicantPreviewRoute, committeeRoute } from "../routes";
-import { appTitle, expirationText, logoutText, viewApplicantsText } from "../strings";
+import { appTitle, expirationText, logoutText, viewApplicantsText, viewInvitationListText } from "../strings";
 import './CommitteePage.css';
 
 
@@ -140,7 +140,7 @@ export const InvitationViewFragment = ({ setViewInvitationList }) => {
                         <div className="flex items-center justify-center p-2 rounded-full">
                             <FaChevronLeft color="gray" />
                         </div>
-                        <h2 className="text-gray-800 font-bold text-lg">Back to Invitations</h2>
+                        <h2 className="text-gray-800 font-bold text-lg">{viewInvitationListText}</h2>
                     </div>
 
                     <div className="flex w-full">
@@ -154,7 +154,7 @@ export const InvitationViewFragment = ({ setViewInvitationList }) => {
                 </div>
 
 
-                <div className="flex flex-col w-[50%] space-y-6 h-full overflow-scroll scrollbar-hide">
+                <div className="flex flex-col w-[50%] space-y-6 h-full overflow-scroll scrollbar-hide rounded-lg border-l-8 border-l-gray-200">
                     <CommitteeApplicantFragment />
                 </div>
             </div>

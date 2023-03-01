@@ -40,11 +40,11 @@ const CommitteeApplicantFragment = () => {
     }, [applicant]);
 
     return (
-        <div className='flex flex-col'>
+        <div className='flex flex-col bg-white'>
             {fetching ? <h2>Loading</h2> :
                 <div className='flex flex-row space-x-4 p-4 items-center'>
                     <div className='flex rounded-full bg-gray-300'>
-                        <img src={applicantInfo['profile_pic']} alt='profile pic' className='w-16 h-16 object-cover rounded-full'></img>
+                        <img src={applicantInfo['profile_pic']} alt='profile pic' className='w-24 h-24 object-cover rounded-full'></img>
                     </div>
                     <h2 className='text-gray-700 font-bold text-xl'>{applicantInfo.firstName + ' ' + applicantInfo.lastName}</h2>
                 </div>}

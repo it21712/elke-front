@@ -73,3 +73,4 @@ export const studyTitleText = 'Τίτλος Σπουδών';
 export const titleText = 'Τίτλος';
 export const fileText = 'Αρχείο';
 export const viewApplicantsText = 'Εμφάνιση Αιτήσεων';
+export const viewInvitationListText = `Όλες οι προσκλήσεις`;
