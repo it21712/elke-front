@@ -130,12 +130,10 @@ export const InvitationViewFragment = ({ setViewInvitationList }) => {
     const invitation = JSON.parse(localStorage.getItem('invitation'));
     console.log(invitation);
 
-    //const [currentApplicant, setCurrentApplicant] = useState({});
-
     return (
         <ApplicantViewProvider>
-            <div className="flex flex-row w-full fixed top-16 h-full bg-gray-200">
-                <div className="flex-col w-[50%] space-y-6 h-full overflow-scroll scrollbar-hide">
+            <div className="flex flex-row w-full fixed top-16 h-full bg-white">
+                <div className="flex-col w-[50%] space-y-6 h-full overflow-scroll scrollbar-hide bg-gray-200">
                     <div className="flex flex-row w-full space-x-6 p-2 items-center justify-start bg-white rounded-b-md cursor-pointer hover:bg-gray-100 transition duration-300 ease-in-out" onClick={() => setViewInvitationList(true)}>
                         <div className="flex items-center justify-center p-2 rounded-full">
                             <FaChevronLeft color="gray" />
