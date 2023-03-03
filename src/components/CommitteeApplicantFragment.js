@@ -86,7 +86,7 @@ const CommitteeApplicantFragment = () => {
         }
 
         return (
-            <div className='flex flex-col w-full space-y-4 p-4 cursor-pointer hover:bg-gray-100 group transition-all duration-500 ease-in-out'>
+            <div className='flex flex-col w-full p-2 space-y-2 cursor-pointer hover:bg-gray-100 group transition-all duration-500 ease-in-out'>
                 <div className='flex flex-row items-center space-x-2 group-hover:translate-x-2 transition-all duration-200 ease-in-out' onClick={() => {
                     setExpanded(!expanded);
                 }}>
@@ -117,11 +117,11 @@ const CommitteeApplicantFragment = () => {
     }, [applicant]);
 
     return (
-        <div className='flex flex-col bg-white rounded-lg overflow-y-auto'>
+        <div className='flex flex-col bg-white rounded-lg w-full overflow-y-auto'>
             {fetching ? <></> :
                 <div className='flex flex-col px-4 pt-4 pb-14 items-start justify-start'>
-                    {applicantInfo && <FadeInListNest key={applicantInfo.profile_pic} tWrapperStyle='flex flex-col p-4 items-start justify-start w-full h-full'>
-                        <div className='flex flex-row space-x-4 items-center'>
+                    {applicantInfo && <FadeInListNest key={applicantInfo.profile_pic} delay={100} tWrapperStyle='flex flex-col p-4 items-start justify-start w-full h-full'>
+                        <div className='flex flex-row space-x-4 items-center w-full'>
                             <div className='flex rounded-full bg-white mb-12 shadow-xl'>
                                 <img src={applicantInfo['profile_pic']} alt='profile pic' className='w-28 h-28 object-cover rounded-full p-2'></img>
                             </div>
@@ -131,7 +131,7 @@ const CommitteeApplicantFragment = () => {
                             <h2 className='text-gray-700 font-bold text-2xl'>{applicantInfo.firstName + ' ' + applicantInfo.lastName}</h2>
                         </span>
 
-                        <div className='flex flex-row space-x-2 items-center justify-start mt-2 -translate-x-1'>
+                        <div className='flex flex-row space-x-2 items-center justify-start mt-2 -translate-x-1 w-full'>
 
                             <MapPinIcon className='w-5 h-5' color='gray' />
                             <h2 className='text-gray-500 text-base font-semibold'>{applicantInfo.country + ', ' + applicantInfo.city + ', ' +

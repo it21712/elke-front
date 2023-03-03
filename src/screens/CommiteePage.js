@@ -4,7 +4,7 @@ import { json, useNavigate, useNavigation } from "react-router-dom";
 import { EVALUATOR_APPLICANT_INFO_URL, EVALUATOR_APPLICANT_PROFILEPIC_URL, EVALUATOR_VIEW_INVITATIONS_URL } from "../backend/urls";
 import CommitteeApplicantFragment from "../components/CommitteeApplicantFragment";
 import CommitteeInvitation from "../components/CommitteeInvitation";
-import FadeInList from "../components/FadeInList";
+import FadeInList, { FadeInListNest } from "../components/FadeInList";
 import { ApplicantViewContext, ApplicantViewProvider } from "../context/ApplicantViewProvider";
 import useAxiosEvaluator from "../hooks/useAxiosEvaluator";
 import { applicantPreviewRoute, committeeRoute } from "../routes";
@@ -108,18 +108,14 @@ export const InvitationListViewFragment = ({ setViewInvitationList }) => {
     const handleShowApplicants = (invitation) => { localStorage.setItem('invitation', JSON.stringify(invitation)); setViewInvitationList(false); }
 
     return (
-        <div className="flex flex-row w-screen fixed top-16 bg-gray-200 h-full">
-            <div className={`scrollbar-hide flex flex-col h-full w-full mt-[10%] justify-start border-r overflow-y-scroll items-center transition-all duration-300 ease-in-out`}>
-                {/* <div className={`flex flex-col w-[60%] space-y-4 items-center`}>
-                    {invitations ? invitations.map((invitation) => <CommitteeInvitation key={invitation.id} data={invitation} handleShowApplicants={() => handleShowApplicants(invitation)} />) : <></>}
-                </div> */}
-                <div className={`flex flex-col w-[60%] space-y-4 items-center`}>
-                    {invitations && <FadeInList tWrapperStyle={'flex flex-col w-[60%] space-y-4 items-center'} items={invitations.map((invitation) => <CommitteeInvitation key={invitation.id} data={invitation} handleShowApplicants={() => handleShowApplicants(invitation)} />)} />}
 
-                </div>
+        <div className="flex flex-col w-full h-screen bg-gray-200 justify-start items-center overflow-y-scroll scrollbar-hide space-y-4 pt-10">
+            {invitations &&
+                <FadeInListNest delay={400} tWrapperStyle={"flex flex-col w-full bg-gray-200 justify-start items-center overflow-y-scroll scrollbar-hide pt-10"}>
 
+                    {invitations.map((invitation) => <CommitteeInvitation key={invitation.id} data={invitation} handleShowApplicants={() => handleShowApplicants(invitation)} />)}
+                </FadeInListNest>}
 
-            </div>
         </div>
     );
 }
@@ -152,7 +148,7 @@ export const InvitationViewFragment = ({ setViewInvitationList }) => {
                 </div>
 
 
-                <div className="flex flex-col w-[50%] space-y-6 h-full overflow-scroll scrollbar-hide rounded-lg border-l-8 border-l-gray-200">
+                <div className="flex w-[50%] space-y-6 h-full overflow-scroll scrollbar-hide rounded-lg border-l-8 border-l-gray-200">
                     <CommitteeApplicantFragment />
                 </div>
             </div>

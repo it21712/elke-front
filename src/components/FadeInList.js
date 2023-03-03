@@ -19,7 +19,7 @@ const FadeInList = ({ tWrapperStyle, items }) => {
     return (
         <div className={tWrapperStyle}>
             {visibleItems.map((item, index) => (
-                <div key={index} className={`opacity-0 animate-fade-in w-full h-full`}>
+                <div key={index} className={`opacity-0 animate-fade-in`}>
                     {item}
                 </div>
             ))}
@@ -27,7 +27,7 @@ const FadeInList = ({ tWrapperStyle, items }) => {
     );
 };
 
-export const FadeInListNest = ({ children, tWrapperStyle }) => {
+export const FadeInListNest = ({ children, tWrapperStyle, delay }) => {
 
     const [visibleItems, setVisibleItems] = useState([children[0]]);
 
@@ -38,7 +38,7 @@ export const FadeInListNest = ({ children, tWrapperStyle }) => {
                     const nextItem = children[prevVisibleItems.length];
                     return [...prevVisibleItems, nextItem];
                 });
-        }, 100);
+        }, delay);
 
         return () => clearInterval(intervalId);
     }, [visibleItems.length]);
@@ -46,7 +46,7 @@ export const FadeInListNest = ({ children, tWrapperStyle }) => {
     return (
         <div className={tWrapperStyle}>
             {visibleItems.map((item, index) => (
-                <div key={index} className={`opacity-0 animate-fade-in w-full`}>
+                <div key={index} className={`opacity-0 animate-fade-in ${tWrapperStyle}`}>
                     {item}
                 </div>
             ))}

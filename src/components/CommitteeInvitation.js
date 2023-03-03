@@ -80,7 +80,7 @@ const CommitteeInvitation = ({ data, handleShowApplicants, preview = false }) =>
 
 
     return (
-        <div className={`flex flex-col w-full ${!preview && 'max-w-[600px]'} h-full bg-white py-4 justify-start items-start rounded-lg hover:shadow-lg transition-all duration-1000 ease-in-out`}>
+        <div className={`flex flex-col w-full ${!preview && 'max-w-[600px]'} h-full bg-white py-4 rounded-lg hover:shadow-lg transition-all duration-1000 ease-in-out`}>
             <div className="flex flex-col w-full px-6 bg-white justify-start items-start">
                 <h2 className="font-bold text-gray-700 text-xl">{data.program_title}</h2>
                 <h2 className="font-bold text-gray-500 -translate-y-[10%]">{data.title}</h2>
