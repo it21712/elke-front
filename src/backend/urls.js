@@ -15,3 +15,4 @@ export const EVALUATOR_VIEW_INVITATIONS_URL = '/committee/invitations/';
 export const EVALUATOR_APPLICANT_PROFILEPIC_URL = '/committee/applicant_pic/';
 export const EVALUATOR_APPLICANT_INFO_URL = '/committee/applicant_info/';
 export const EVALUATOR_APPLICANT_FILES_URL = '/committee/applicant_files/';
+export const EVALUATOR_DOWNLOAD_FILE_URL = '/committee/applicant_file_download/';

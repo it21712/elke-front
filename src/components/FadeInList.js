@@ -30,9 +30,6 @@ const FadeInList = ({ tWrapperStyle, items }) => {
 export const FadeInListNest = ({ children, tWrapperStyle }) => {
 
     const [visibleItems, setVisibleItems] = useState([children[0]]);
-    console.log(visibleItems);
-
-
 
     useEffect(() => {
         const intervalId = setInterval(() => {

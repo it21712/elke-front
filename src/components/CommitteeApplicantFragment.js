@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { EVALUATOR_APPLICANT_FILES_URL, EVALUATOR_APPLICANT_INFO_URL, EVALUATOR_APPLICANT_PROFILEPIC_URL } from '../backend/urls';
+import { EVALUATOR_APPLICANT_FILES_URL, EVALUATOR_APPLICANT_INFO_URL, EVALUATOR_APPLICANT_PROFILEPIC_URL, EVALUATOR_DOWNLOAD_FILE_URL } from '../backend/urls';
 import useApplicant from '../hooks/useApplicant'
 import useAxiosEvaluator from '../hooks/useAxiosEvaluator';
 import { ChevronRightIcon, DevicePhoneMobileIcon, EnvelopeIcon, MapPinIcon, PhoneIcon, EllipsisVerticalIcon } from '@heroicons/react/24/solid';
@@ -21,23 +21,26 @@ const CommitteeApplicantFragment = () => {
         applicant && axiosEvaluator.post(EVALUATOR_APPLICANT_INFO_URL, { id: applicant.id })
             .then(response => {
                 if (response.status === 200) {
-                    console.log(response.data);
-                    setApplicantInfo(response.data);
+                    //console.log(response.data);
+                    //setApplicantInfo(response.data);
+                    let data = response.data;
+                    axiosEvaluator.post(EVALUATOR_APPLICANT_PROFILEPIC_URL, { id: applicant.id }, { responseType: 'blob' })
+                        .then(response => {
+                            if (response.status !== 204) {
+                                const url = URL.createObjectURL(response.data);
+                                //setApplicantInfo(prevInfo => { return { ...prevInfo, profile_pic: url } });
+                                data.profile_pic = url;
+                                setApplicantInfo(data);
+                                console.warn(applicantInfo);
+                                setFetching(false);
 
+                            }
+                        });
                 }
             })
             .catch(error => console.error(error));
 
-        applicant && axiosEvaluator.post(EVALUATOR_APPLICANT_PROFILEPIC_URL, { id: applicant.id }, { responseType: 'blob' })
-            .then(response => {
-                if (response.status !== 204) {
-                    const url = URL.createObjectURL(response.data);
-                    setApplicantInfo(prevInfo => { return { ...prevInfo, profile_pic: url } });
-                    console.warn(applicantInfo);
-                    setFetching(false);
 
-                }
-            });
     }
 
 
@@ -58,6 +61,30 @@ const CommitteeApplicantFragment = () => {
             fetchApplicantFiles();
         }, [])
 
+        const FilePreview = ({ file }) => {
+
+            const handleFileDownload = () => {
+                axiosEvaluator.get(EVALUATOR_DOWNLOAD_FILE_URL, { params: { file_id: file.id }, responseType: 'blob' }).then((response) => {
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    // set the file name
+                    const filename = response.headers['content-disposition'].split('filename=')[1];
+                    link.setAttribute('download', filename);
+                    document.body.appendChild(link);
+                    link.click();
+                });
+            }
+
+            return (
+                <div className='group p-4 flex flex-row bg-slate-200 max-w-[300px] rounded-lg space-x-2 items-center' onClick={handleFileDownload}>
+                    <h2 className='text-gray-500 font-bold truncate'>{file.file}</h2>
+                    <EllipsisVerticalIcon className='h-6 w-6' color='gray' />
+                </div>
+            );
+
+        }
+
         return (
             <div className='flex flex-col w-full space-y-4 p-4 cursor-pointer hover:bg-gray-100 group transition-all duration-500 ease-in-out'>
                 <div className='flex flex-row items-center space-x-2 group-hover:translate-x-2 transition-all duration-200 ease-in-out' onClick={() => {
@@ -70,12 +97,9 @@ const CommitteeApplicantFragment = () => {
                 {
 
                     <div style={{ maxHeight: expanded ? '400px' : 0 }} className={`flex flex-row overflow-x-auto space-x-2 transition-all ease-in-out ${expanded ? 'duration-700' : 'duration-200'}`}>
-                        {files.map((file) => {
+                        {files.map((file, i) => {
                             return (
-                                <div className='group p-4 flex flex-row bg-slate-200 max-w-[300px] rounded-lg space-x-2 items-center'>
-                                    <h2 className='text-gray-500 font-bold truncate'>{file.file}</h2>
-                                    <EllipsisVerticalIcon className='h-6 w-6' color='gray' />
-                                </div>
+                                <FilePreview key={i} file={file} />
                             );
                         })}
                     </div>

@@ -110,20 +110,7 @@ const UserDetailsFragment = ({ email }) => {
         const [roadError, setRoadError] = useState(null);
         const [roadNumError, setRoadNumError] = useState(null);
         const [tkError, setTkError] = useState(null);
-        //let imageFile = useRef({});
-        // useEffect(() => {
-        //     console.log(imageFile.current);
-        //     axiosPrivate.get(APPLICANT_PROFILEPIC_URL, { responseType: 'arraybuffer' }).then((response) => {
-        //         console.log(response.data);
-        //         const blob = new Blob([response.data]);
 
-        //         imageFile.current = new File([blob], localStorage.getItem('profilePicName'));
-        //         //console.log(imageFile);
-        //         setProfilePic(imageFile);
-        //     });
-
-
-        // }, [imageFile.current]);
 
         const handleFileSelect = (e) => {
             const blob = new Blob([e.target.files[0]]);
