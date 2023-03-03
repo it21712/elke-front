@@ -131,7 +131,7 @@ const CommitteeApplicantFragment = () => {
                             <h2 className='text-gray-700 font-bold text-2xl'>{applicantInfo.firstName + ' ' + applicantInfo.lastName}</h2>
                         </span>
 
-                        <div className='flex flex-row space-x-2 items-center justify-start mt-2 -translate-x-1 w-full'>
+                        <div className='flex flex-row space-x-2 items-center justify-start -translate-x-1 -translate-y-6 w-full'>
 
                             <MapPinIcon className='w-5 h-5' color='gray' />
                             <h2 className='text-gray-500 text-base font-semibold'>{applicantInfo.country + ', ' + applicantInfo.city + ', ' +
