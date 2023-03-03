@@ -127,16 +127,17 @@ const CommitteeApplicantFragment = () => {
                             </div>
 
                         </div>
-                        <span className='flex w-full justify-start'>
+                        <div className='flex flex-col justify-start items-start'>
                             <h2 className='text-gray-700 font-bold text-2xl'>{applicantInfo.firstName + ' ' + applicantInfo.lastName}</h2>
-                        </span>
 
-                        <div className='flex flex-row space-x-2 items-center justify-start -translate-x-1 -translate-y-6 w-full'>
+                            <div className='flex flex-row space-x-2 items-center justify-start -translate-x-1 w-full'>
 
-                            <MapPinIcon className='w-5 h-5' color='gray' />
-                            <h2 className='text-gray-500 text-base font-semibold'>{applicantInfo.country + ', ' + applicantInfo.city + ', ' +
-                                applicantInfo.road + ' ' + applicantInfo.road_number + ', ' + applicantInfo.postal_code}</h2>
+                                <MapPinIcon className='w-5 h-5' color='gray' />
+                                <h2 className='text-gray-500 text-base font-semibold'>{applicantInfo.country + ', ' + applicantInfo.city + ', ' +
+                                    applicantInfo.road + ' ' + applicantInfo.road_number + ', ' + applicantInfo.postal_code}</h2>
+                            </div>
                         </div>
+
 
                         <span className='flex w-full border-b border-b-gray-300'>
                             <h2 className='text-gray-700 font-semibold text-xl mt-12 mb-4'>{contactText}</h2>
