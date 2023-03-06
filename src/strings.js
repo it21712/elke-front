@@ -74,3 +74,6 @@ export const titleText = 'Τίτλος';
 export const fileText = 'Αρχείο';
 export const viewApplicantsText = 'Εμφάνιση Αιτήσεων';
 export const viewInvitationListText = `Όλες οι προσκλήσεις`;
+export const invitationStartDateText = 'Έναρξη αιτήσεων';
+export const invitationEndDateText = 'Ενεργή έως';
+export const invitationDescText = 'Περιγραφή θέσης';
