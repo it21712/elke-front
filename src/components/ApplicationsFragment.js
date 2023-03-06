@@ -58,7 +58,11 @@ const ApplicationsFragment = () => {
         <div className="w-full h-full flex flex-col bg-gray-200 items-center overflow-y-auto space-y-6">
 
             <span className="w-full h-[10%]"></span>
-            {invitations ? invitations.map((invitation) => <div className="w-[50%]"><InvitationComponent key={invitation.id} invitation={invitation} /> </div>) : <></>}
+            {invitations ?
+                <FadeInListNest tWrapperStyle={'w-full h-full flex flex-col bg-gray-200 items-center overflow-y-auto space-y-6'} delay={150}>
+                    {invitations.map((invitation) => <div className="w-[50%]"><InvitationComponent key={invitation.id} invitation={invitation} /> </div>)}
+                </FadeInListNest> : <></>}
+            {/* {invitations ? invitations.map((invitation) => <div className="w-[50%]"><InvitationComponent key={invitation.id} invitation={invitation} /> </div>) : <></>} */}
 
         </div>
     );

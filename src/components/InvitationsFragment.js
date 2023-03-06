@@ -4,6 +4,7 @@ import { APPLICANTS_APPLY_URL, APPLICANTS_VIEW_INVITATIONS_URL } from "../backen
 import useAxiosRole from "../hooks/useAxiosRole";
 import { applyInvitationText, expirationText, invitationDescText, invitationEndDateText } from "../strings";
 import { FaCheckCircle, FaChevronDown, FaClock } from "react-icons/fa";
+import { FadeInListNest } from "./FadeInList";
 const InvitationsFragment = () => {
     const axiosRole = useAxiosRole();
 
@@ -73,7 +74,11 @@ const InvitationsFragment = () => {
         <div className="w-full h-full flex flex-col bg-gray-200 items-center overflow-y-auto space-y-6">
 
             <span className="w-full h-[10%]"></span>
-            {invitations ? invitations.map((invitation) => <div className="w-[50%]"><InvitationComponent key={invitation.id} invitation={invitation} /> </div>) : <></>}
+            {invitations ?
+                <FadeInListNest tWrapperStyle={'w-full h-full flex flex-col bg-gray-200 items-center overflow-y-auto space-y-6'}>
+                    {invitations.map((invitation) => <div className="w-[50%]"><InvitationComponent key={invitation.id} invitation={invitation} /> </div>)}
+                </FadeInListNest> : <></>}
+            {/* {invitations ? invitations.map((invitation) => <div className="w-[50%]"><InvitationComponent key={invitation.id} invitation={invitation} /> </div>) : <></>} */}
 
         </div>
     );
