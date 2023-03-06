@@ -49,7 +49,7 @@ const InvitationsFragment = () => {
                     <div className="flex flex-col mt-6 items-start">
                         <div className="flex flex-row justify-between items-center w-full cursor-pointer pl-2 pr-4 py-4 hover:bg-gray-100 border-b border-b-gray-300 transition-colors duration-200 ease-in mb-4"
                             onClick={() => setShowDesc(!showDesc)}>
-                            <h2 className="font-bold text-gray-700">{invitationDescText}:</h2>
+                            <h2 className="font-bold text-gray-700">{invitationDescText}</h2>
                             <FaChevronDown className="w-5 h-5" color="gray" />
                         </div>
                         <div style={{ maxHeight: showDesc ? '400px' : 0 }} className="flex w-full overflow-hidden transition-all duration-500 ease-in-out mb-6">
