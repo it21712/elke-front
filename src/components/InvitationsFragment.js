@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { APPLICANTS_APPLY_URL, APPLICANTS_VIEW_INVITATIONS_URL } from "../backend/urls";
 
 import useAxiosRole from "../hooks/useAxiosRole";
-import { expirationText } from "../strings";
-import { FaCheckCircle } from "react-icons/fa";
+import { applyInvitationText, expirationText, invitationDescText, invitationEndDateText } from "../strings";
+import { FaCheckCircle, FaChevronDown, FaClock } from "react-icons/fa";
 const InvitationsFragment = () => {
     const axiosRole = useAxiosRole();
 
@@ -20,56 +20,60 @@ const InvitationsFragment = () => {
     }, []);
 
     const InvitationComponent = ({ invitation }) => {
+
+        const [showDesc, setShowDesc] = useState(false);
+        const [apply, setApply] = useState(false);
+
+        const handleApply = () => {
+            const data = { id: invitation.id };
+
+            axiosRole.post(APPLICANTS_APPLY_URL, data).then(response => {
+                if (response.status === 200) {
+                    setApply(true);
+                }
+            }).catch(error => { console.error(error) });
+        }
+
         return (
-            <div></div>
+            <div className="p-4 bg-white rounded-lg flex flex-col shadow-lg">
+                <div className="flex flex-col w-full px-6 bg-white justify-start items-start">
+                    <h2 className="font-bold text-gray-700 text-xl">{invitation.program_title}</h2>
+                    <h2 className="font-bold text-gray-500 -translate-y-[10%]">{invitation.title}</h2>
+
+                    <div className="flex flex-row space-x-2 mt-4 items-center">
+                        <FaClock color="gray" />
+                        <h2 className="font-bold text-gray-700">{invitationEndDateText}:</h2>
+                        <h2 className="text-sm text-gray-500 font-semibold">{invitation.end.split('T')[0]}</h2>
+                    </div>
+
+                    <div className="flex flex-col mt-6 items-start">
+                        <div className="flex flex-row justify-between items-center w-full cursor-pointer pl-2 pr-4 py-4 hover:bg-gray-100 border-b border-b-gray-300 transition-colors duration-200 ease-in mb-4"
+                            onClick={() => setShowDesc(!showDesc)}>
+                            <h2 className="font-bold text-gray-700">{invitationDescText}:</h2>
+                            <FaChevronDown className="w-5 h-5" color="gray" />
+                        </div>
+                        <div style={{ maxHeight: showDesc ? '400px' : 0 }} className="flex w-full overflow-hidden transition-all duration-500 ease-in-out mb-6">
+                            <h2 className="font-bold text-gray-500 break-words text-left">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</h2>
+                        </div>
+                    </div>
+
+                    <div className={`${apply ? 'cursor-default bg-gray-300' : 'bg-gray-800 cursor-pointer hover:bg-gray-600'} p-4 rounded-md flex w-full items-center justify-center transition-colors duration-300 ease-in-out`}
+                        onClick={() => { if (!apply) handleApply() }}>
+                        <h2 className="font-bold text-white">{applyInvitationText}</h2>
+                    </div>
+
+                </div>
+            </div>
         );
     }
 
-    // const InvitationComponent = ({ invitation }) => {
-
-    //     const [apply, setApply] = useState(false);
-
-    //     const handleApply = () => {
-    //         const data = { id: invitation.id };
-
-    //         axiosRole.post(APPLICANTS_APPLY_URL, data).then(response => {
-    //             if (response.status === 200) {
-    //                 setApply(true);
-    //             }
-    //         }).catch(error => { console.error(error) });
-    //     }
-
-    //     return (
-    //         <div className={`mb-20 mx-auto ${apply ? 'transition  duration-300 opacity-60 ' : 'opacity-100 '} flex flex-col md:w-[60%] w-[90%] h-[30%] min-h-[250px] bg-white rounded-t-2xl rounded-b-2xl drop-shadow-md ${apply ? 'cursor-default ' : 'cursor-pointer '} transition-all ease-in-out duration-500 hover:-translate-y-1 hover:shadow-lg`}>
-    //             <span className='flex px-6 justify-between items-center w-full h-[20%] bg-stone-300'>
-    //                 <h1 className='text-xl font-sans font-medium text-gray-800'>{invitation.title}</h1>
-    //                 <h2 className='text-sm text-gray-700'>{invitation.start.split('T')[0]}</h2>
-    //             </span>
-    //             <div className='flex flex-col pl-6 mt-2 w-full items-start justify-start'>
-    //                 <h2 className='font-sans text-base mt-10 '>{invitation.program_title}</h2>
-    //                 <span className='flex justify-start items-center w-full mt-8'>
-    //                     <h2 className='text-lg'>{expirationText}</h2>
-    //                     <h2 className='pl-8 tex-base font-mono'>{invitation.end.split('T')[0]}</h2>
-    //                 </span>
-    //                 <span className='flex w-full justify-end '>
-    //                     {!apply ? <div className='flex cursor-pointer  p-2 rounded-lg mr-4 bg-stone-500' onClick={handleApply}>
-    //                         <h2 className='text-white'>Apply Now</h2>
-    //                     </div> : <div className='flex justify-end p-2 mr-4 rounded-lg'>
-    //                         <div className='flex m-auto w-full h-full'><FaCheckCircle color='green' size={22} /></div></div>}
-    //                 </span>
-    //             </div>
-
-    //         </div>
-    //     );
-
-
-    // }
 
     return (
-        <div className='w-full h-full flex flex-col bg-gray-200 overflow-y-scroll'>
-            <div className='w-full h-full mt-12'>
-                {invitations ? invitations.map((invitation) => <InvitationComponent key={invitation.id} invitation={invitation} />) : <></>}
-            </div>
+        // fix 2 scrollbars appearing and showing white bottom
+        <div className="w-full h-full flex flex-col bg-gray-200 items-center overflow-y-auto space-y-6">
+
+            <span className="w-full h-[10%]"></span>
+            {invitations ? invitations.map((invitation) => <div className="w-[50%]"><InvitationComponent key={invitation.id} invitation={invitation} /> </div>) : <></>}
 
         </div>
     );

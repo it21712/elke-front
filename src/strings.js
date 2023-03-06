@@ -77,3 +77,4 @@ export const viewInvitationListText = `Όλες οι προσκλήσεις`;
 export const invitationStartDateText = 'Έναρξη αιτήσεων';
 export const invitationEndDateText = 'Ενεργή έως';
 export const invitationDescText = 'Περιγραφή θέσης';
+export const applyInvitationText = 'Κάντε Αίτηση';
