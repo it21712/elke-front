@@ -71,15 +71,12 @@ const InvitationsFragment = () => {
 
     return (
         // fix 2 scrollbars appearing and showing white bottom
-        <div className="w-full h-full flex flex-col bg-gray-200 items-center overflow-y-auto space-y-6">
+        <div className="w-full h-screen flex flex-col bg-gray-200 items-center justify-start overflow-y-auto space-y-6 pt-10">
 
-            <span className="w-full h-[10%]"></span>
-            {invitations ?
-                <FadeInListNest tWrapperStyle={'w-full h-full flex flex-col bg-gray-200 items-center overflow-y-auto space-y-6'}>
-                    {invitations.map((invitation) => <div className="w-[50%]"><InvitationComponent key={invitation.id} invitation={invitation} /> </div>)}
-                </FadeInListNest> : <></>}
-            {/* {invitations ? invitations.map((invitation) => <div className="w-[50%]"><InvitationComponent key={invitation.id} invitation={invitation} /> </div>) : <></>} */}
-
+            {invitations &&
+                <FadeInListNest tWrapperStyle={'w-full flex flex-col bg-gray-200 justify-start items-center overflow-y-auto pt-10'} delay={200}>
+                    {invitations.map((invitation) => <div className="w-[50%] flex "><InvitationComponent key={invitation.id} invitation={invitation} /> </div>)}
+                </FadeInListNest>}
         </div>
     );
 }
