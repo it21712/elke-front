@@ -1,13 +1,13 @@
-import { createContext, memo, useContext, useEffect, useRef, useState } from "react";
-import { FaArrowDown, FaArrowUp, FaCheckCircle, FaChevronDown, FaChevronLeft, FaChevronRight, FaClock, FaEnvelope, FaFontAwesome } from "react-icons/fa";
-import { json, useNavigate, useNavigation } from "react-router-dom";
-import { EVALUATOR_APPLICANT_INFO_URL, EVALUATOR_APPLICANT_PROFILEPIC_URL, EVALUATOR_VIEW_INVITATIONS_URL } from "../backend/urls";
+import { useEffect, useState } from "react";
+import { FaChevronLeft } from "react-icons/fa";
+
+import { EVALUATOR_VIEW_INVITATIONS_URL } from "../backend/urls";
 import CommitteeApplicantFragment from "../components/CommitteeApplicantFragment";
 import CommitteeInvitation from "../components/CommitteeInvitation";
-import FadeInList, { FadeInListNest } from "../components/FadeInList";
-import { ApplicantViewContext, ApplicantViewProvider } from "../context/ApplicantViewProvider";
+import { FadeInListNest } from "../components/FadeInList";
+import { ApplicantViewProvider } from "../context/ApplicantViewProvider";
 import useAxiosEvaluator from "../hooks/useAxiosEvaluator";
-import { applicantPreviewRoute, committeeRoute } from "../routes";
+
 import { appTitle, expirationText, logoutText, viewApplicantsText, viewInvitationListText } from "../strings";
 import './CommitteePage.css';
 

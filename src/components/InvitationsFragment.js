@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import { APPLICANTS_APPLY_URL, APPLICANTS_VIEW_INVITATIONS_URL } from "../backend/urls";
+import { APPLICANTS_VIEW_INVITATIONS_URL } from "../backend/urls";
 
 import useAxiosRole from "../hooks/useAxiosRole";
-import { applyInvitationText, expirationText, invitationDescText, invitationEndDateText } from "../strings";
-import { FaCheckCircle, FaChevronDown, FaClock } from "react-icons/fa";
 import { FadeInListNest } from "./FadeInList";
 import InvitationComponent from "./InvitationComponent";
 const InvitationsFragment = () => {

@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { EVALUATOR_APPLICANT_FILES_URL, EVALUATOR_APPLICANT_INFO_URL, EVALUATOR_APPLICANT_PROFILEPIC_URL, EVALUATOR_DOWNLOAD_FILE_URL } from '../backend/urls';
 import useApplicant from '../hooks/useApplicant'
 import useAxiosEvaluator from '../hooks/useAxiosEvaluator';
-import { ChevronRightIcon, DevicePhoneMobileIcon, EnvelopeIcon, MapPinIcon, PhoneIcon, EllipsisVerticalIcon } from '@heroicons/react/24/solid';
+import { ChevronRightIcon, DevicePhoneMobileIcon, EnvelopeIcon, MapPinIcon, PhoneIcon, EllipsisVerticalIcon, ArrowDownOnSquareStackIcon } from '@heroicons/react/24/solid';
 import { AFRText, contactText, CRTsText, CVText, FLNsText, MCTText, PGDsText, PHDsText, UGDsText, uploadedFilesText, WXPsText } from '../strings';
 import FILETYPES from '../backend/fileTypes';
 import { FadeInListNest } from './FadeInList';
@@ -77,8 +77,8 @@ const CommitteeApplicantFragment = () => {
             }
 
             return (
-                <div className='group p-4 flex flex-row bg-slate-200 max-w-[300px] rounded-lg space-x-2 items-center' onClick={handleFileDownload}>
-                    <h2 className='text-gray-500 font-bold truncate'>{file.file}</h2>
+                <div className='group p-4 flex flex-row bg-slate-200 max-w-[300px] rounded-lg space-x-2 items-center'>
+                    <h2 className='text-gray-500 font-bold truncate hover:text-gray-800 max-w-[200px] transition-colors duration-200' onClick={handleFileDownload}>{file.file}</h2>
                     <EllipsisVerticalIcon className='h-6 w-6' color='gray' />
                 </div>
             );
@@ -96,7 +96,7 @@ const CommitteeApplicantFragment = () => {
                 </div>
                 {
 
-                    <div style={{ maxHeight: expanded ? '400px' : 0 }} className={`flex flex-row overflow-x-auto space-x-2 transition-all ease-in-out ${expanded ? 'duration-700' : 'duration-200'}`}>
+                    <div style={{ maxHeight: expanded ? '400px' : 0 }} className={`flex flex-row  pl-8 overflow-x-auto space-x-2 transition-all ease-in-out ${expanded ? 'duration-700' : 'duration-200'}`}>
                         {files.map((file, i) => {
                             return (
                                 <FilePreview key={i} file={file} />
@@ -156,8 +156,11 @@ const CommitteeApplicantFragment = () => {
                             <h2 className='text-gray-700 font-semibold'>{applicantInfo.cell_phone}</h2>
                         </div>
 
-                        <span className='flex w-full border-b border-b-gray-300'>
-                            <h2 className='text-gray-700 font-semibold text-xl mt-12 mb-4'>{uploadedFilesText}</h2>
+                        <span className='flex w-full border-b border-b-gray-300 items-center justify-between mt-12 pb-4'>
+                            <h2 className='text-gray-700 font-semibold text-xl'>{uploadedFilesText}</h2>
+                            <div className='p-3 bg-orange-400 rounded-full shadow-lg cursor-pointer hover:bg-orange-500 transition-colors duration-300 mr-6'>
+                                <ArrowDownOnSquareStackIcon className='w-6 h-6' color='white' />
+                            </div>
                         </span>
                         <FileCategoryButton category={UGDsText} fileType={FILETYPES.UNDER_GRAD_DIPLOMA} />
                         <FileCategoryButton category={PGDsText} fileType={FILETYPES.POST_GRAD_DIPLOMA} />
@@ -169,10 +172,6 @@ const CommitteeApplicantFragment = () => {
                         <FileCategoryButton category={MCTText} fileType={FILETYPES.MILITARY_CERT} />
                         <FileCategoryButton category={AFRText} fileType={FILETYPES.AFFIRMATION} />
                     </FadeInListNest>}
-
-
-
-
 
                 </div>
             }
