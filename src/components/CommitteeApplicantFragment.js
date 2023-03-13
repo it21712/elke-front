@@ -96,7 +96,7 @@ const CommitteeApplicantFragment = () => {
                 </div>
                 {
 
-                    <div style={{ maxHeight: expanded ? '400px' : 0 }} className={`flex flex-row  pl-8 overflow-x-auto space-x-2 transition-all ease-in-out ${expanded ? 'duration-500 py-3' : 'duration-200'}`}>
+                    <div style={{ maxHeight: expanded ? '400px' : 0 }} className={`flex flex-row  overflow-y-hidden pl-8 overflow-x-auto space-x-2 transition-all ease-in-out ${expanded ? 'duration-500 py-3' : 'duration-200'}`}>
                         {files.map((file, i) => {
                             return (
                                 <FilePreview key={i} file={file} />
